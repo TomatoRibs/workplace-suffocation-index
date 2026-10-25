@@ -12,6 +12,9 @@
 规则：
     - 读内容而不是只看文件名；zip 会逐条解压读取。
     - 命中即判 FAIL，不做自动放行；确属误报必须人工改写句子绕开，不得加白名单。
+    - 同时校验包里 SKILL.md 的 name 是否为 ASCII kebab-case
+      （^[a-z0-9]+(-[a-z0-9]+)*$）。GitHub 仓库名与 WorkBuddy 市场标识名共用这一个值，
+      填中文/大写会被市场打回（报错原文："仅支持小写字母、数字和连字符（kebab-case）"）。
 """
 import sys
 import os
@@ -113,6 +116,31 @@ def scan(path):
     return hits
 
 
+# name 必须是 ASCII kebab-case：小写字母/数字，单个连字符分隔，无中文、无大写、无下划线、无首尾连字符。
+# GitHub 仓库名与 WorkBuddy 市场标识名共用这一个值，所以按严的来。
+KEBAB = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+
+
+def check_names(path):
+    """校验包里每个 SKILL.md 的 frontmatter name 是否合规，返回问题列表。"""
+    problems = []
+    for name, txt in iter_texts(path):
+        if not name.lower().endswith("skill.md"):
+            continue
+        parts = txt.split("---")
+        if len(parts) < 3:
+            problems.append((name, "缺少 frontmatter（文件头两行 --- 之间）"))
+            continue
+        fm = parts[1]
+        m = re.search(r"^name:\s*(.+)$", fm, re.M)
+        val = m.group(1).strip().strip("\"'") if m else ""
+        if not val:
+            problems.append((name, "缺少 name 字段"))
+        elif not KEBAB.match(val):
+            problems.append((name, "name=%r 不合规，必须匹配 ^[a-z0-9]+(-[a-z0-9]+)*$（小写字母/数字/单个连字符，不能有中文或大写）" % val))
+    return problems
+
+
 def main():
     targets = [a for a in sys.argv[1:] if not a.startswith("--")]
     if not targets:
@@ -133,6 +161,14 @@ def main():
                 print("  FAIL [%s] %s:%d 命中「%s」 -> %s" % (cat, name, line_no, kw, snippet))
         else:
             print("  PASS 未命中任何禁词")
+
+        nprob = check_names(t)
+        if nprob:
+            failed = True
+            for nm, msg in nprob:
+                print("  FAIL [命名] %s -> %s" % (nm, msg))
+        else:
+            print("  PASS name 为合规 kebab-case（可直接建 GitHub 仓库 / 上架市场）")
 
     print("")
     print("结论：" + ("FAIL —— 先改，禁止导出" if failed else "PASS —— 允许导出"))

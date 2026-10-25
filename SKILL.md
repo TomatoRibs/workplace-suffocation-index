@@ -1,5 +1,5 @@
 ---
-name: 工位窒息指数
+name: workplace-suffocation-index
 display_name: 工位窒息指数
 display_name_en: Workplace Suffocation Index
 description: 生成可离线打开的「职场窒息指数」自测网页，单文件、数据不出本机。当用户想做职场内耗 / 压力类自测或吐槽工具时触发。

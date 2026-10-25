@@ -33,7 +33,7 @@ bash scripts/install_local.sh .
 ## 文件结构
 
 ```
-工位窒息指数/
+workplace-suffocation-index/   # 技能目录名 = SKILL.name（slug），display_name 才是「工位窒息指数」
 ├── SKILL.md            # 技能定义（触发词、工作流）
 ├── README.md           # 本说明
 ├── assets/
