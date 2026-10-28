@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE) [![Single File HTML](https://img.shields.io/badge/Single--File-HTML-orange.svg)](./assets/workplace-suffocation-index.html) [![WorkBuddy Skill](https://img.shields.io/badge/WorkBuddy-Skill-purple.svg)](./SKILL.md)
 
-**🔗 [在线体验 →](https://tomatoribs.github.io/workplace-suffocation-index/)**（点开就玩 · 免安装 · 免注册）
+**这是一个 WorkBuddy 技能**——下载装好后，一句话就能生成或重做这一份。只想先看看效果，也可以只打开网页版。
 
 ![工位窒息指数首屏](./assets/preview.png)
 
@@ -17,6 +17,28 @@
 给 10 个职场日常场景各挑一个发生频率，测完生成一张专属窒息海报。
 
 **10 道场景题 · 5 档结论 · 30 秒 · 0 数据上传**
+
+## 怎么装
+
+**方式一：装成 WorkBuddy 技能（推荐）**
+
+下载本仓库（右上角 `Code → Download ZIP`，或用 git），然后在解压出来的目录里执行：
+
+```bash
+git clone https://github.com/TomatoRibs/workplace-suffocation-index.git
+cd workplace-suffocation-index
+bash scripts/install_local.sh
+```
+
+装好后技能进入 `~/.workbuddy/skills/workplace-suffocation-index/`，回到 WorkBuddy 直接说话即可。
+
+WorkBuddy 是一个本地 AI 助手；装成技能后，一句话触发：「做一个 10 题、30 秒出结果的工位窒息测试网页」。
+
+**方式二：只想打开网页版**
+
+1. 双击 `assets/workplace-suffocation-index.html`（零依赖、可离线，手机可直接打开）。
+2. 凭平时真实感觉，给 10 个场景各挑一个频率，约 30 秒。
+3. 看档位与点评，存 9:16 海报转发，或复制链接。
 
 ## 你会测出什么
 
@@ -52,12 +74,6 @@
 
 实际效果见上方首屏截图：十道场景题 + 频率选择 + 顶部实时数字。
 
-## 怎么用
-
-1. 双击 `assets/workplace-suffocation-index.html`（零依赖、可离线，手机可直接打开）。
-2. 凭平时真实感觉，给 10 个场景各挑一个频率，约 30 秒。
-3. 看档位与点评，存 9:16 海报转发，或复制链接。
-
 ## 隐私
 
 纯浏览器运行，可离线。所有答案只留在你这台设备上，不会发给任何人。分享链接只包含你勾选的频率——**转发链接等同于公开你的答案**，请确认后再发。
@@ -80,14 +96,6 @@
 ## 为什么做这个
 
 「我累不累」这种问题问不出来，因为累本身已经成了正常。给 10 个日常场景各打个分，让指针替你说实话——很多时候缺的不是抗压能力，是氧气。
-
-## 装成 WorkBuddy 技能（可选）
-
-```bash
-bash scripts/install_local.sh .
-```
-
-WorkBuddy 是一个本地 AI 助手；装成技能后，一句话触发：「做一个 10 题、30 秒出结果的工位窒息测试网页」。
 
 ## 免责声明
 
