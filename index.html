@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html data-page-node-id="O7U7XY8soXZc093FXaHVFK" lang="zh-CN">
+<head data-page-node-id="uHK8CXF9Z3DUmDgOgzFX0t">
+<script data-page-node-id="BQnPNFYYvkHcUUwU6g9qOH" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="iHGe3pJ7ihmqpOGIicYxRj" charset="UTF-8">
+<meta data-page-node-id="3AUo44qBMAASmIygiJaJZe" content="width=device-width, initial-scale=1.0" name="viewport">
+<title data-page-node-id="MFpLGRk7678VfjGKd72Dx7" data-pnid-children="tocfUzCWJskUHGkBLtXbbM">工位窒息指数 · 你的办公室缺氧了吗</title>
+<style data-page-node-id="uqP3mi9nxayDsvdspAJLMl" data-pnid-children="lZz4VTxzeNghMorK4K3jK0">
+  :root {
+    --bg: #eef1f4;
+    --card: #ffffff;
+    --ink: #22303a;
+    --muted: #5c6a75;          /* 白底对比度 5.57 */
+    --teal: #0c857c;
+    --teal-deep: #075a52;
+    --teal-soft: #eaf4f3;
+    --line: #e3e8ed;
+    --shadow: 0 6px 20px rgba(20, 40, 55, 0.06);
+    --radius: 16px;
+    --navH: 58px;
+    /* 字号阶梯（12/13/14/16/18/20/24/32） */
+    --fs-xs: 12px; --fs-sm: 13px; --fs-md: 14px; --fs-lg: 16px;
+    --fs-xl: 18px; --fs-2xl: 20px; --fs-3xl: 24px; --fs-4xl: 32px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px 48px; }
+
+  /* 键盘焦点态（全站统一） */
+  :focus-visible { outline: 3px solid rgba(12,133,124,0.55); outline-offset: 2px; border-radius: 6px; }
+
+  /* 顶部导航 */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .bar {
+    max-width: 1200px; margin: 0 auto; padding: 0 28px; height: var(--navH);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: var(--fs-lg); }
+  nav .brand .logo {
+    width: 30px; height: 30px; border-radius: 9px; background: var(--teal);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+  }
+  nav .nav-r { display: flex; align-items: center; gap: 16px; font-size: var(--fs-xs); color: var(--muted); }
+  nav .pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(12,133,124,0.12); color: var(--teal-deep); padding: 5px 11px; border-radius: 999px; font-weight: 600; }
+  nav .pill svg { display: block; }
+
+  /* 有色横幅：答题页与结果页同构同色 */
+  .band {
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    background: linear-gradient(115deg, var(--teal) 0%, var(--teal-deep) 100%);
+    color: #fff; border-radius: var(--radius);
+    padding: 24px 32px; margin-top: 22px; box-shadow: var(--shadow);
+  }
+  .band .eyebrow { font-size: var(--fs-xs); letter-spacing: 2px; opacity: 0.82; font-weight: 600; }
+  .band h1 { margin: 8px 0 6px; font-size: 28px; line-height: 1.25; }
+  .band p { margin: 0; opacity: 0.9; font-size: var(--fs-md); max-width: 540px; }
+  .band .stats { display: flex; gap: 12px; }
+  .band .stat {
+    background: rgba(255,255,255,0.15); border-radius: 14px; padding: 14px 18px;
+    text-align: center; min-width: 84px;
+  }
+  .band .stat b { display: block; font-size: 22px; line-height: 1.1; }
+  .band .stat span { font-size: var(--fs-xs); opacity: 0.88; }
+  .rb-score { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.16); border-radius: 16px; padding: 12px 22px; }
+  .rb-score .rb-n { font-size: 52px; font-weight: 800; line-height: 1; }
+  .rb-score .rb-meta { text-align: left; }
+  .rb-score .rb-meta .rb-t { font-size: var(--fs-xl); font-weight: 800; }
+  .rb-score .rb-meta small { display: block; font-size: var(--fs-xs); opacity: 0.88; }
+  @media (max-width: 900px) { .band { flex-direction: column; } .band .stats, .rb-score { align-self: stretch; justify-content: center; } }
+
+  /* 主体两栏 */
+  .app { display: grid; grid-template-columns: 1.7fr 1fr; gap: 24px; margin-top: 22px; align-items: start; }
+  @media (max-width: 980px) { .app { grid-template-columns: 1fr; } }
+
+  /* 左栏题目区：不再卡片套卡片，题卡即卡片 */
+  .quiz-head { padding: 0 4px; }
+  .quiz-head h2 { margin: 0 0 2px; font-size: var(--fs-2xl); }
+  .quiz-head .sub { color: var(--muted); font-size: var(--fs-sm); margin-bottom: 16px; }
+  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .progress .track { flex: 1; height: 8px; border-radius: 8px; background: #dde4ea; overflow: hidden; }
+  .progress .fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--teal), var(--teal-deep)); transition: width .25s ease; border-radius: 8px; }
+  .progress .count { font-size: var(--fs-xs); color: var(--muted); white-space: nowrap; font-weight: 600; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .qcard { border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 12px; background: var(--card); box-shadow: var(--shadow); }
+  .qcard .q { font-size: var(--fs-md); font-weight: 600; margin-bottom: 10px; display: flex; gap: 8px; }
+  .qcard .q .num { flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--teal-soft); color: var(--teal-deep); font-size: var(--fs-xs); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .chips { display: flex; gap: 5px; }
+  .chips button {
+    flex: 1; font-family: inherit; font-size: var(--fs-xs); font-weight: 600;
+    border: 1.5px solid var(--line); background: #fff; color: var(--muted);
+    border-radius: 9px; padding: 10px 0; min-height: 38px; cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background-color .15s ease;
+  }
+  .chips button:hover { border-color: var(--teal); color: var(--teal-deep); }
+  .chips button.on { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+  .actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  button.big {
+    font-family: inherit; font-size: var(--fs-md); font-weight: 700; border: none; border-radius: 11px;
+    padding: 12px 20px; min-height: 44px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .12s ease, opacity .2s ease, box-shadow .15s ease;
+  }
+  button.big svg { display: block; }
+  button.big:active { transform: scale(0.97); }
+  .btn-primary { background: linear-gradient(115deg, var(--teal), var(--teal-deep)); color: #fff; }
+  .btn-primary:hover { box-shadow: 0 6px 16px rgba(7,90,82,0.28); }
+  .btn-ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--teal); color: var(--teal-deep); }
+  .btn-teal { background: var(--teal); color: #fff; }
+  .btn-teal:hover { box-shadow: 0 6px 16px rgba(12,133,124,0.26); }
+  .btn-primary:disabled, .btn-teal:disabled, .btn-ghost:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+
+  /* 右栏（关于 + 指针）整体吸顶 */
+  .rail-col { position: sticky; top: calc(var(--navH) + 16px); display: flex; flex-direction: column; gap: 16px; }
+  .panel { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
+  .panel h2 { margin: 0 0 2px; font-size: var(--fs-xl); }
+  .panel .sub { color: var(--muted); font-size: var(--fs-sm); margin-bottom: 14px; }
+
+  .fact { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: var(--fs-sm); }
+  .fact:last-child { border-bottom: none; }
+  .fact .k { flex: none; width: 66px; color: var(--muted); font-weight: 600; }
+  .fact .v { color: var(--ink); }
+
+  /* ============ 指针计量器 ============ */
+  .gauge-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .gauge-head .t { font-size: var(--fs-lg); font-weight: 800; }
+  .gauge-head .s { font-size: var(--fs-xs); color: var(--muted); }
+  .gauge-box { width: 100%; max-width: 260px; margin: 0 auto; }
+  .gauge-box svg { display: block; width: 100%; height: auto; }
+  .g-needle { transition: transform .5s cubic-bezier(.3,1.35,.5,1); }
+  .g-arc { transition: stroke-dashoffset .5s ease; }
+  .gauge-read { text-align: center; margin-top: -8px; }
+  .gauge-read .n { font-size: 38px; font-weight: 800; line-height: 1; }
+  .gauge-read .n small { font-size: var(--fs-md); color: var(--muted); font-weight: 600; }
+  .gauge-foot { margin-top: 10px; font-size: var(--fs-xs); color: var(--muted); text-align: center; line-height: 1.65; }
+  .gauge-foot b { color: var(--teal-deep); }
+
+  /* ============ 结果页（一屏） ============ */
+  #viewResult { display: none; }
+  #viewResult.show { display: block; animation: fadein .35s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .result-body { display: grid; grid-template-columns: 1fr 380px; gap: 22px; margin-top: 22px; align-items: start; }
+  @media (max-width: 980px) { .result-body { grid-template-columns: 1fr; } }
+
+  .res-main { display: flex; flex-direction: column; gap: 14px; }
+  .gp-flex { display: flex; align-items: center; gap: 20px; }
+  .gp-flex .gauge-box { max-width: 250px; flex: none; }
+  .gp-info { flex: 1; min-width: 0; }
+  .gp-score { display: flex; align-items: baseline; gap: 6px; }
+  .gp-score b { font-size: 44px; font-weight: 800; line-height: 1; }
+  .gp-score span { font-size: var(--fs-sm); color: var(--muted); }
+  .gp-tier { font-size: var(--fs-3xl); font-weight: 800; margin: 6px 0 2px; }
+  .gp-range { font-size: var(--fs-xs); color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+  .gp-desc { font-size: var(--fs-sm); color: var(--ink); line-height: 1.7; }
+  .tier-strip { display: flex; gap: 6px; margin-top: 16px; }
+  .tier-strip .ts { flex: 1; text-align: center; font-size: var(--fs-xs); font-weight: 600; padding: 9px 0; border-radius: 9px; background: #f1f4f7; color: var(--muted); }
+  .tier-strip .ts.on { background: var(--teal); color: #fff; }
+
+  /* 点评块：浅色底 + 标签色，不用彩色左边线 */
+  .block { padding: 14px 16px; background: var(--card); border-radius: 12px; box-shadow: var(--shadow); }
+  .block .lb { font-size: var(--fs-xs); font-weight: 700; color: var(--teal-deep); letter-spacing: 1px; margin-bottom: 6px; display: inline-flex; align-items: center; gap: 6px; }
+  .block .lb svg { display: block; }
+  .block .tx { font-size: var(--fs-md); color: var(--ink); line-height: 1.75; }
+  .block.advice { background: var(--teal-soft); }
+  .block.advice .lb { color: var(--teal-deep); }
+  .share-box { display: none; }
+  .share-box.show { display: block; }
+  .share-box input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: var(--fs-sm); color: var(--muted); background: var(--bg); }
+
+  /* 右列：海报 */
+  .poster-shell {
+    background: linear-gradient(165deg, #e6f3f2 0%, #ffffff 72%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 10px;
+  }
+  #poster { width: 100%; height: auto; display: block; border-radius: 12px; }
+  .poster-tip { text-align: center; font-size: var(--fs-xs); color: var(--muted); margin-top: 10px; line-height: 1.65; }
+
+  /* FAQ 底部通栏 */
+  .faq-panel { margin-top: 24px; }
+  .faq details { border-bottom: 1px solid var(--line); padding: 11px 0; }
+  .faq summary { cursor: pointer; font-weight: 600; font-size: var(--fs-md); }
+  .faq p { font-size: var(--fs-sm); color: var(--muted); margin: 8px 0 0; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 10px; font-size: var(--fs-md); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 50; }
+  .toast.show { opacity: 1; }
+  footer { text-align: center; color: var(--muted); font-size: var(--fs-xs); margin-top: 24px; }
+
+  /* 尊重系统减少动效偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body data-page-node-id="N4hkxNinUEuaOWY6hKHeKu">
+<nav data-page-node-id="4h5y5wYTThf40Zl7LZkfsN">
+  <div data-page-node-id="PnHyvHZwa46IviHQ6a66Mk" class="bar">
+    <div data-page-node-id="4KUTc45hPUw3MRMLx2Op2b" class="brand">
+      <span data-page-node-id="EgqZWKQduroKlrYE02KZOZ" class="logo">
+        <svg data-page-node-id="HStwGLuINs9raNagd3iATc" aria-hidden="true" fill="none" height="17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="17">
+          <path data-page-node-id="WHaV2dnY0VQumsCDhhB2lh" d="M4 15a8 8 0 0 1 16 0"/><line data-page-node-id="i6mCpTfxyb0gpdUn9OoBjw" x1="12" x2="16.5" y1="15" y2="9.5"/><circle data-page-node-id="tBbRulDcEehy6EyoITRsCR" cx="12" cy="15" r="1.6"/>
+        </svg>
+      </span><!--pnid:dFAdlYApvBLGYagXdwq6cP-->工位窒息指数
+    </div>
+    <div data-page-node-id="V22md2yAI7QltNCXGtr3R8" class="nav-r">
+      <span data-page-node-id="gmGA0cnfUoB8CpFQkjlgR5" class="pill">
+        <svg data-page-node-id="kR17JmdmtVVU76r66ePRUb" aria-hidden="true" fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="13">
+          <rect data-page-node-id="RdjBl5gJXbbNDh66PyKMJr" height="9" rx="2" width="14" x="5" y="11"/><path data-page-node-id="BNDODGBYZpTUfuv9XkHCtI" d="M8 11V8a4 4 0 0 1 8 0v3"/>
+        </svg><!--pnid:M6dGBmJoMU4NBZ26zpEHm6-->数据零上传
+      </span>
+      <span data-page-node-id="ebSpRqDV9V4GCEHIQq3zHW"><!--pnid:1nbaQkGb8ZojpV9Ozd5bsr-->纯浏览器运行 · 可离线</span>
+    </div>
+  </div>
+</nav>
+
+<div data-page-node-id="wXaWXGNbiEabnoqbVvK9gF" class="wrap">
+
+  <!--pnid:hHq8EPv2l5NSCxtLKpuaWX--><!-- ========== 视图一：答题 ========== -->
+  <div data-page-node-id="MW5AeU2qj2jBw297HCtWwf" id="viewQuiz">
+    <header data-page-node-id="bPyiAc9OzQLkirJGXzSFzH" class="band">
+      <div data-page-node-id="1l8tEqAu0dtmGsAn2wogSP">
+        <div data-page-node-id="jPHmncAGQOcdXE5t3nB0TX" class="eyebrow"><!--pnid:BofKeR8xUk5gy4Mas0iNZr-->职场自测 · 10 题 30 秒</div>
+        <h1 data-page-node-id="qVQMOIEGbr829kSklbabhk"><!--pnid:O1hLmj3ckks0gfxOf2Vx1v-->你的办公室，缺氧了吗？</h1>
+        <p data-page-node-id="250nLR4shw1hePcj8FS33Z"><!--pnid:24RisFTnQAq7Gj1KCHOl8v-->给 10 个职场日常场景各挑一个频率，测完生成一张专属窒息海报。所有作答都留在你这台设备上，不会发给任何人。</p>
+      </div>
+      <div data-page-node-id="HBauDXhRoRUH2J3pQnWMZt" class="stats">
+        <div data-page-node-id="k2iQySsMcZQiJOlp6GXgzJ" class="stat"><b data-page-node-id="QcenhQ1c8MXZMNZ2lULuMY"><!--pnid:ppQcDxEH0HTxVgsCZPBpiA-->10</b><span data-page-node-id="m63k64iP9mubF6fy1W6TH1"><!--pnid:keXxKmkGKMsxBmFqGRtyrR-->道场景题</span></div>
+        <div data-page-node-id="xJSxZDyK9Qxxol6e8GguNy" class="stat"><b data-page-node-id="hvYJ22Ltj7LLMLGj4zBrcV"><!--pnid:sOJAwzo2L61VjWkZlwy1By-->5</b><span data-page-node-id="gYvdGx70hrHJHjeEYSteIu"><!--pnid:A7wFolRG0jKxW26sHTQWYC-->档结论</span></div>
+        <div data-page-node-id="dpRsXliEuAyyPsq44E4sZS" class="stat"><b data-page-node-id="R8C9FsFxdVQibwg7FwKbAF"><!--pnid:SmHd6MbPIRL832Pmb0JeWw-->0</b><span data-page-node-id="kN2RYI7Ho7UF7mKUFALYaY"><!--pnid:muYsVPh7uhrjjvbGBUTRVv-->数据上传</span></div>
+      </div>
+    </header>
+
+    <div data-page-node-id="20sOEQbhwEfoIfcAetiqyT" class="app">
+      <!--pnid:9xVUYiaLJPmB7otOUH8lva--><!-- 左：题目 -->
+      <section data-page-node-id="oiKODduRXhqchZrlBvuWkg">
+        <div data-page-node-id="VsvQvnB6JJGsyKXQ8YZNE4" class="quiz-head">
+          <h2 data-page-node-id="x11Mmk1S1zlbfuhS6prOcI"><!--pnid:rYB3YA6YewB5coICcjpe6g-->十种职场缺氧时刻</h2>
+          <div data-page-node-id="3sSv8sBZqb9AjfipxB0fbi" class="sub"><!--pnid:3XqP9TamA99U5InlBuoZvg-->凭平时真实感觉给每题挑一个频率，从「从不」到「总是」，填完才能出分。</div>
+        </div>
+        <div data-page-node-id="tbxTBz1boO7DjspAyOx5EM" class="progress">
+          <div data-page-node-id="0r3LuKXGW6iT534hAy151f" class="track"><div data-page-node-id="rCbBkoFYxzdgBxCs0alSve" class="fill" id="progFill"></div></div>
+          <div data-page-node-id="QQ9J773gORLH7iOVglIl5B" class="count" id="progCount"><!--pnid:uLwlLg58y2hBG5mvxzRenc-->已填 0 / 10</div>
+        </div>
+        <div data-page-node-id="RgdnkuOeDRGsGpV5qGI0rk" class="grid" id="items"></div>
+        <div data-page-node-id="7iatAhcRq3INo1nnIrxqb0" class="actions">
+          <button data-page-node-id="cT0Ymuyqf8TBmPMQEPJF1V" class="big btn-primary" id="analyze">
+            <svg data-page-node-id="3dUrONjDOnuPvlugamQN2E" aria-hidden="true" fill="none" height="17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="17">
+              <path data-page-node-id="Orc8wua8lgaqCqgEKxLd40" d="M4 15a8 8 0 0 1 16 0"/><line data-page-node-id="fZGSAk15rO3J15MF0SdGnn" x1="12" x2="16.5" y1="15" y2="9.5"/><circle data-page-node-id="k6ytE7tvsJfqH3Du1zzbAP" cx="12" cy="15" r="1.6"/>
+            </svg><!--pnid:dwN5P0puR4DYYQJTDsDrFm-->开始诊断
+          </button>
+          <button data-page-node-id="FQYG1LX0xxXaQ0aRy1uKFB" class="big btn-ghost" disabled id="reset">
+            <svg data-page-node-id="hEHHGQvJYm5yBBQb7LUDQc" aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="16">
+              <path data-page-node-id="mfkXYZxDR8NT1KJpunJGzG" d="M20 12a8 8 0 1 1-2.34-5.66"/><path data-page-node-id="uTkceA4mBUAGECr2Vhaeyo" d="M20 4v4h-4"/>
+            </svg><!--pnid:mOr6WkuF3FFGF6CNGv9I72-->重新测试
+          </button>
+        </div>
+      </section>
+
+      <!--pnid:ifFuWRVr3AUh0ekX1PDhiX--><!-- 右：关于这个指数 + 实时指针 -->
+      <div data-page-node-id="IsdIvcUnHgq9WihbERo6da" class="rail-col">
+        <aside data-page-node-id="hAXZlfy9940ebx7RD66fsq" class="panel">
+          <h2 data-page-node-id="fguThhRuAqUNGAixr2B6Mr"><!--pnid:UNJuupWNTzvNBwh9Pf2Igt-->关于这个指数</h2>
+          <div data-page-node-id="NUh7rLJ1NMKAvTz3BNi1h4" class="sub"><!--pnid:gprfnYprrnd6ctcnhSOLrh-->怎么算的，以及它到底能说明什么。</div>
+          <div data-page-node-id="RfPLmjZP4mxC8OnRHQKzZi" class="fact"><span data-page-node-id="9TGR1Z6uEeWoxJK7ggrjPB" class="k"><!--pnid:WQFvpfCUpPo1xOPU43GRGe-->测什么</span><span data-page-node-id="adIhQN3I6TUyCZigOVhPGO" class="v"><!--pnid:vsI8zX9U4bjJopCLZUmfTG-->微管理、沟通失灵、加班文化、偏心、粉饰太平、功劳被吞、情怀打压、边界失守、办公室政治、成长停滞。</span></div>
+          <div data-page-node-id="ATZ3TBczxZ3JXCIMNu7op0" class="fact"><span data-page-node-id="sveoZtD7wCNtY8IBgr8jEn" class="k"><!--pnid:Nmdwb4XjAraiov6QEc4XmT-->怎么答</span><span data-page-node-id="Covig3gFhvZJCU2HcqL3wC" class="v"><!--pnid:O6euFnt8V5PDS4FHFlKJsp-->每题从「从不」到「总是」五档，凭平时真实频率选，别只拿最倒霉的那天。</span></div>
+          <div data-page-node-id="R1idjALkD1LzAkAR2Zs4X8" class="fact"><span data-page-node-id="hBbR6khT4kuzHHjHaXE6wW" class="k"><!--pnid:EaPSV1vb3pzW72VZxvTSzb-->怎么算</span><span data-page-node-id="YCaOZuqSG3dlyXZHTeKBUW" class="v"><!--pnid:wtSjxqWY0MvwDjHro41KdS-->十题求和（10–50），等比例换算成 0–100 分，四舍五入，每题等权。</span></div>
+          <div data-page-node-id="V72Tmv1NgqvDVZIVgg9vUz" class="fact"><span data-page-node-id="Bs03DKFn045mb8nzGFqMPh" class="k"><!--pnid:urKgjiBgT5kZ7cVt6zQ8VR-->几档</span><span data-page-node-id="vFyzPU2FuvwibuRI1Z2uzI" class="v"><!--pnid:3RMVL41kyZJO4Vmq6QJwOm-->清新职场 / 略有异味 / 明显缺氧 / 高危预警 / 毒气室级别。</span></div>
+          <div data-page-node-id="wYanYblXGL9AeSfNUOUCfJ" class="fact"><span data-page-node-id="CTgMziTZFuKzD3cywBpGzV" class="k"><!--pnid:F2GnnfUUBPO2lkbGW6rF0d-->分享</span><span data-page-node-id="ISNE5FukmUBD8qZHk6P5s3" class="v"><!--pnid:wvUAVCvP7PTBaQ2tSXRRnw-->结果页生成一张海报图，也可复制链接，答案编码进 URL，别人打开即还原。</span></div>
+          <div data-page-node-id="TwAQs3Lmq1tMavENGN9XsM" class="fact"><span data-page-node-id="ARLb0g1T3RiYzs8b1ZXzYG" class="k"><!--pnid:6BrKXniZUAvCTBzWutIggi-->隐私</span><span data-page-node-id="Moe2deI7XtaIVpHmaLXacu" class="v"><!--pnid:7gdUN9IZGOAosXLTGvJTI1-->全部计算在浏览器内完成，不联网、不上传任何数据。</span></div>
+        </aside>
+
+        <div data-page-node-id="ZTOzE1dtmeUGfXxrxP4WeO" class="panel">
+          <div data-page-node-id="A7mslu4CvYcdsQCVACbeY7" class="gauge-head"><span data-page-node-id="ZJEvtvzptkGlPDiF8jfjro" class="t"><!--pnid:CEuuMKBOzZynaowySFfQSH-->实时指针</span><span data-page-node-id="OaFejtozlKxzFcvHLyp8to" class="s"><!--pnid:meAN9DDlCvg6zU8U7Yn1b7-->随作答即时变动</span></div>
+          <div data-page-node-id="Lqn6xUJrZVoOINXxF24hV2" class="gauge-box" id="liveGauge"></div>
+          <div data-page-node-id="bfNZxtbbqufNCZz7cpFWS1" class="gauge-read"><span data-page-node-id="wg9tCFA5pHI1E9ho3VaoqH" class="n"><span data-page-node-id="hhGIbfowZbbvENzk5EBmWu" id="liveScore"><!--pnid:ZzG2bifQMrSINPrIo97sNX-->0</span><small data-page-node-id="UNBIR3rb4OcOwJECpap2kx"><!--pnid:hCnAFxnYNmsELO11K4jf3t--> / 100</small></span></div>
+          <div data-page-node-id="cyzDEuM3bRHdNakAZHI3qP" class="gauge-foot"><!--pnid:QvLdX5k6GAbeUgmau78H5N-->已填 <b data-page-node-id="u3F7PoILKKloDBer0IKb8R" id="liveCount"><!--pnid:6OHfhjomrPq3vR8Q0qKHr1-->0</b><!--pnid:5EqMFKgvqMMFNjpGuY23V1--> / 10 · 这里只显示分数，不出结论；点「开始诊断」才跳转结论页。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--pnid:B1M80z0l4qHIuaBzQgp2UG--><!-- ========== 视图二：结果页（一屏） ========== -->
+  <div data-page-node-id="Kfd662dbPEzqW3EuWgtBHs" id="viewResult">
+    <header data-page-node-id="DFPKIygwWg4PyVv18veVf2" class="band">
+      <div data-page-node-id="JkDiyZtpw6Q4rF3vp12SWj">
+        <div data-page-node-id="MgMhK4PJa1Rb416wC6PG3l" class="eyebrow"><!--pnid:xr4zu48TzydCRXiAhv8Wh5-->诊断完成 · 结果出炉</div>
+        <h1 data-page-node-id="94i2fGQWN3odAlAiuAYHcY"><!--pnid:vgkCCFgMH9V46reasfIHH1-->你的工位窒息指数</h1>
+        <p data-page-node-id="9CwyAahu0pKyoyg3DO5Xsi"><!--pnid:WA5A5lte7M2nYkmdXcehNq-->下面这张就是你的专属海报——保存下来，发给你的同事，看看谁更窒息。</p>
+      </div>
+      <div data-page-node-id="JKH1qUvcrLXI3mnr7jkzs8" class="rb-score">
+        <div data-page-node-id="8SXCeBlhm8sxrUZnOJjw2V" class="rb-n" id="rbScore"><!--pnid:8L94yZCHAgOP1qqnarzy6k-->0</div>
+        <div data-page-node-id="fUdCinTHEqFktfW5ddcsDk" class="rb-meta"><span data-page-node-id="kKhlfcl2l3Y4a0ejxX86hV" class="rb-t" id="rbTier"><!--pnid:2qc6bobZtsc3ZIOnUZKNrt-->—</span><small data-page-node-id="XhYENDhSnIJZDBJyv814wj"><!--pnid:ySO6fuPNd7V0giwq6b09sV-->/ 100 分</small></div>
+      </div>
+    </header>
+
+    <div data-page-node-id="8k1oTBejXH4JoXLMJOUuOj" class="result-body">
+      <!--pnid:Hs1dBLcB8LM0micdUa42dG--><!-- 左列：指针读数 + 点评 + 操作 -->
+      <div data-page-node-id="xoQAdcroBcumOQPwLpvkLy" class="res-main">
+        <section data-page-node-id="DqIUlFNjR6OfSsZ8Hf9meE" class="panel">
+          <div data-page-node-id="IfdMyjubDeqhgX2lso419O" class="gauge-head"><span data-page-node-id="9u6oGBVofHF5mpwGF6LBHf" class="t"><!--pnid:g8cqwIg1DFAAzlKti4jgYY-->指针读数</span><span data-page-node-id="BMsTM3StoLS7R7RbDVWedg" class="s"><!--pnid:ETvh14F4nKfJNfl1mhW6uT-->本次作答的最终位置</span></div>
+          <div data-page-node-id="T5l1E1lS8sntExLTU0er8f" class="gp-flex">
+            <div data-page-node-id="tHniZbuUUznu3wIacvPYo1" class="gauge-box" id="finalGauge"></div>
+            <div data-page-node-id="1hFciIwPIK8QygBvqOKXJt" class="gp-info">
+              <div data-page-node-id="X43vHf4x7xaHYtXaJyfePp" class="gp-score"><b data-page-node-id="kgSLXmtQqzUGn0lM3EVXsU" id="fScore"><!--pnid:MApjwO2448B5gnedfSFuRt-->0</b><span data-page-node-id="vPswbeiy7CxNgvUIpyYepi"><!--pnid:NXsgq0p7VjcsUMtIUEjQvi-->/ 100</span></div>
+              <div data-page-node-id="wEVkDeWouiPTHZX522oipy" class="gp-tier" id="fTier"><!--pnid:L20BdFiR4epXAIPTo4gMtB-->—</div>
+              <div data-page-node-id="5auWkThmVPfcbCUpasF5BU" class="gp-range" id="fRange"><!--pnid:31SNs2bFoqMHFzAOuxIRmO-->—</div>
+              <div data-page-node-id="7NVec1dCHVypauxOeksoMB" class="gp-desc" id="fDesc"></div>
+            </div>
+          </div>
+          <div data-page-node-id="2V9K4ntD3Rx4gWNqz9U8Nq" class="tier-strip" id="tierStrip"></div>
+        </section>
+
+        <div data-page-node-id="8j0NlEaHbHZVDzg1yb969b" class="block">
+          <div data-page-node-id="pQexZvBQXnpxt8bvMP9XyJ" class="lb">
+            <svg data-page-node-id="0tS7bywDfcXRfcwP1N551B" aria-hidden="true" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="14">
+              <path data-page-node-id="tW8DAOhqcs6zXCghjS8pkB" d="M4 6h16v10H10l-4 3v-3H4z"/><path data-page-node-id="DkQ0uwO8zkieSEny3csrKD" d="M8 10h8"/>
+            </svg><!--pnid:o6huL2IG9OheWjXcEwoekL-->毒舌点评
+          </div>
+          <div data-page-node-id="oK4TGLrHmBF2r0wj7Bu0LR" class="tx" id="rsRoast"></div>
+        </div>
+        <div data-page-node-id="aA17k9w4cXJK925fVAaLqM" class="block advice">
+          <div data-page-node-id="oUiky1oe1QS61iCScOIzVn" class="lb">
+            <svg data-page-node-id="UIJu0nh9kdrvzEqytSg3yv" aria-hidden="true" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="14">
+              <path data-page-node-id="mJvCv7RfyWLrBp5q5Oo3S7" d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path data-page-node-id="tkxVgnQF3uVABLpA2PWlxy" d="M9 12l2 2 4-4"/>
+            </svg><!--pnid:mjq4vmcgABx4TsMr2H88od-->保命建议
+          </div>
+          <div data-page-node-id="wOXqskTMMD9Yzf3pmwBz76" class="tx" id="rsAdvice"></div>
+        </div>
+
+        <div data-page-node-id="Xu921HuVGYuGGPD1qpVBy5" class="actions">
+          <button data-page-node-id="ziWtR3AfsgryywLY7er5LH" class="big btn-primary" id="saveImg">
+            <svg data-page-node-id="MaXVkUEgGHl1BdbquECcfL" aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="16">
+              <path data-page-node-id="gvDLMIIu48m9UJwY9LvIfd" d="M12 3v11"/><path data-page-node-id="pxhyP7RCRrJt0UlRUFf2xf" d="M7 11l5 5 5-5"/><path data-page-node-id="aNL3S8v5QgXrIbygYWdFof" d="M4 20h16"/>
+            </svg><!--pnid:DIjUULX4asbTUtKh2uUgz6-->保存海报
+          </button>
+          <button data-page-node-id="nRF5eHSRCNFv9IZQd5MBxq" class="big btn-teal" id="share">
+            <svg data-page-node-id="wZDJTtNHt8W49BAqrBRW1X" aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="16">
+              <path data-page-node-id="TcrVZpHhRDRgzkpsSudJHU" d="M10 13a4 4 0 0 0 5.66 0l2.83-2.83a4 4 0 0 0-5.66-5.66l-1.41 1.41"/><path data-page-node-id="3n8jB0SNL8sds8JN8WCJbq" d="M14 11a4 4 0 0 0-5.66 0L5.5 13.83a4 4 0 0 0 5.66 5.66l1.41-1.41"/>
+            </svg><!--pnid:okfJmmyYN5MdGiQKy3vwHN-->复制分享链接
+          </button>
+          <button data-page-node-id="dqWol0tvVrrddUpCYzqVoR" class="big btn-ghost" id="restart">
+            <svg data-page-node-id="dJT0uJ2p5eAPWaHFKJmXMp" aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24" width="16">
+              <path data-page-node-id="ZExPBquwkWWhDUh2cy1c4I" d="M20 12a8 8 0 1 1-2.34-5.66"/><path data-page-node-id="S7SC0HgnXqjfB8oSu9Tbec" d="M20 4v4h-4"/>
+            </svg><!--pnid:Q0Y5yf0dK9ncPZpQxDDkzr-->重新测试
+          </button>
+        </div>
+        <div data-page-node-id="3lV7qhVlGG8DA4KkTd0iHD" class="share-box" id="shareBox"><input data-page-node-id="D2nxWEjzpI8GA6pYtpnvDZ" aria-label="分享链接" id="shareUrl" readonly></div>
+      </div>
+
+      <!--pnid:GyiHHJEgPoaibLVX066s0e--><!-- 右列：海报 -->
+      <div data-page-node-id="s6rvTH4gemxTA5qd4DMKBy">
+        <div data-page-node-id="xu6Yra2ThO6P88XUUZTuvP" class="poster-shell">
+          <canvas data-page-node-id="Fz4WdIeWCX3bX8hRf2gtMr" aria-label="工位窒息指数结果海报" height="1334" id="poster" role="img" width="750"></canvas>
+        </div>
+        <div data-page-node-id="nrL879RhWD8GcueDKjUyL9" class="poster-tip"><!--pnid:JhoN0nu1vPtpuRa0FM4kAU-->右键图片另存为，或点「保存海报」下载 PNG<br data-page-node-id="MscqjQgiBpSSSHWiSiCi9l"><!--pnid:IoGMCw7qu9MH2r0Nyb6rl4-->答案已编码进链接，复制即可让别人看到同一结果</div>
+      </div>
+    </div>
+  </div>
+
+  <!--pnid:K0lJUrv23mTlbamTzyBN5s--><!-- ========== FAQ：底部通栏 ========== -->
+  <section data-page-node-id="V0an1zdyu7cZ4p47A4DKxf" class="panel faq-panel">
+    <h2 data-page-node-id="4rBixJDrbxFTuXcYBPTjtP"><!--pnid:9doidwy8zYpNUToSgs6Hp7-->常见问题</h2>
+    <div data-page-node-id="JLXh01hWpmI31buapTRKLF" class="sub"><!--pnid:dM5oQnTNn0Kd9Zi3ZFryoU-->关于这个工具的常见疑问。</div>
+    <div data-page-node-id="hQ6hdtrFL9CfxRSeJiKwHx" class="faq">
+      <details data-page-node-id="fAgRjYtxSkUrKVujtBCwpZ"><summary data-page-node-id="q5j8gwFMWvdO7iEOnYXC0B"><!--pnid:iHxpKP7DdXNh65wBq5aLqk-->怎么用这个测试？</summary><p data-page-node-id="Lcbz39g2isVkGFciPsiXgn"><!--pnid:KDGxYAobi2SiEQK49IqVX5-->按平时的真实经验，把 10 句话各评为 1 分（从不）到 5 分（总是），别只拿最糟糕的某一天。填完十题点「开始诊断」，就会跳到结论页并生成你的专属海报。</p></details>
+      <details data-page-node-id="KnBrx5l9RhJf4jgCpc7ynE"><summary data-page-node-id="SxdaOmV8WpsxhjPUyR41py"><!--pnid:M3P2B8ZvnGKGvv7VyV50Kn-->右侧的指针是最终结果吗？</summary><p data-page-node-id="fmA303XfayjHQw6IdktjXY"><!--pnid:lifp4dsJJnj4gQVuZ6IiSr-->不是。右侧指针只是实时预览，随你的作答即时变动，只显示分数、不给结论。最终分数和结论以点「开始诊断」后跳转的结论页为准。</p></details>
+      <details data-page-node-id="dOCONejipe7U0Jy4lDRL7o"><summary data-page-node-id="wvkUwnZMsmpjcZ81u8jHcm"><!--pnid:9uKvUV0MWmM1Nn6PplkWNs-->分数是怎么算出来的？</summary><p data-page-node-id="etA56C1IBKPc0QMbFMNd2f"><!--pnid:3PexpUW40M4Tq2Khse1MvU-->十题相加，总分在 10 到 50 之间，再线性映射到 0–100 并四舍五入。每一题对最终分数的影响一样大。</p></details>
+      <details data-page-node-id="maCOEiSb0i8aagKFJzOvKJ"><summary data-page-node-id="AQEfJGIfr62WtGVQspwQxq"><!--pnid:SrHLxBmrvixPjiRA1oqeod-->我的公司真的窒息，还是只是这周特别崩？</summary><p data-page-node-id="AajuLhLNkonAoUcigYi5f4"><!--pnid:SKlwkGOy9EBb4jED1pb2r8-->难熬的一周可能临时拉高好几题；真正的职场模式会在平常的周里、不同情境下反复出现。结果只是这次回答的快照。</p></details>
+      <details data-page-node-id="ddHPDaSPO3Dx6iWEcKRBAW"><summary data-page-node-id="1cSLQ5R87LcbZj215q7ixP"><!--pnid:eqF3tDgO9tz8WCyfprByVT-->各分数档代表什么？</summary><p data-page-node-id="Fh8wWMAbN8e8HHgYYKD2nz"><!--pnid:Saduurf2M8irGPJbRBG6Zy-->0–20 清新职场；21–40 略有异味；41–60 明显缺氧；61–80 高危预警；81–100 毒气室级别。这些标签只用来概括你输入的内容，不是医疗、法律或人资分类。</p></details>
+      <details data-page-node-id="1hcuRfzgqBT1Rt3IV6z3sO"><summary data-page-node-id="IdQ9X36RIsIOsHZSl6t3Nr"><!--pnid:VNHptDQtoiXT9zOWZKh1F8-->我的答案会被上传吗？</summary><p data-page-node-id="7Q5d6kS0NuRT1HhG57zY4o"><!--pnid:ARenvGd9k040EP45JEwGE7-->不会。所有计算都在你的浏览器里完成，不联网、不上传。复制分享链接时，答案只是编码在 URL 的 # 后面，用来让别人还原同一张结果。</p></details>
+    </div>
+  </section>
+
+  <footer data-page-node-id="AHJcGVIhvrV3vX2wdhiGrM"><!--pnid:79jsYgmVn3BR1VHUgaSISr-->工位窒息指数 · 一个原创的自测小工具，仅供娱乐与自我觉察。</footer>
+</div>
+
+<div data-page-node-id="ZfKhVimtTet7wFClNFEwxF" aria-live="polite" class="toast" id="toast" role="status"></div>
+
+<script data-page-node-id="vc3ecAZyEei7nWsV1nPPd0" data-pnid-children="FrnloVgtKc7fV4QTLVJLxa">
+(function () {
+  "use strict";
+  var F = '"PingFang SC","Microsoft YaHei",sans-serif';
+  var C1 = "#0c857c", C2 = "#075a52"; // 全站统一深青
+
+  var QUESTIONS = [
+    "上级隔三差五就来盯你手头的活，比问你吃了没还勤。",
+    "正式通知永远慢半拍，真消息都是茶水间先听来的。",
+    "到点下班像做贼，还得磨蹭一会儿才敢走。",
+    "晋升名单上，永远是先和领导喝过酒的那几位。",
+    "明明已经乱成一锅粥，会上还在说形势一片大好。",
+    "你熬的夜、出的活，最后名字写在了别人头上。",
+    "你提真实困难，对方回你一句「大家都不容易」。",
+    "半夜手机一响，工作群又@你干活了。",
+    "光是周旋人际关系，就耗掉你一半精力。",
+    "入职时画的饼，到现在还贴在墙上没动过。"
+  ];
+
+  var SCALE = ["从不", "很少", "有时", "经常", "总是"];
+
+  // 五档结论与评语（文案已过一轮去套话：减少「不是A而是B」对仗、双「要么」、破折号）
+  var TIERS = [
+    { max: 20, range: "0–20", name: "清新职场", tag: "清新",
+      desc: "空气干净，节奏正常，下班真的能下班。这种公司现在比大熊猫还稀罕，趁还能喘气赶紧享受——季度重组、组织优化、架构调整，总有一款适合你。",
+      roast: "分数低到这个程度，反而要打个问号。公司确实难得是一种可能，另一种可能是你的忍耐阈值早被磨高了，坏事闯进来，你的第一反应是「正常」。先确认清楚：你说的「一切都好」，是真的好，还是你早就习惯了、甚至不敢承认它不好。",
+      advice: "别急着感动，也别急着发朋友圈。多观察三个月，等一次加班、一次甩锅、一次晋升下来，再下结论。",
+      pdesc: "空气干净，下班真的能下班。这种公司现在比大熊猫还稀罕。",
+      proast: "分数低到这个程度，反而要打个问号：公司确实难得是一种可能，另一种可能是你的忍耐阈值早被磨高了。",
+      padvice: "别急着感动，多观察三个月再下结论。" },
+    { max: 40, range: "21–40", name: "略有异味", tag: "异味",
+      desc: "不算毒，但空气已经开始发闷。偶尔的窒息、间歇的心累，都是身体在给你发信号，别等它变成你的日常。",
+      roast: "你现在的状态像温水煮青蛙：水没开，温度却在一点点往上走。真正危险的不是这点异味，是你已经开始替它找借口：「再忍忍」「大家都这样」「可能是我太敏感」。醒醒，青蛙最后是真的会熟的。",
+      advice: "从今天起把边界立起来：下班不回消息，周末不接需求。公司的病，别拿来当自己的责任。",
+      pdesc: "不算毒，但空气已经开始发闷。身体在给你发信号，别等它变成日常。",
+      proast: "像温水煮青蛙：水没开，温度在一点点往上走。你已经开始替它找借口了——「再忍忍」「大家都这样」。",
+      padvice: "把边界立起来：下班不回消息，周末不接需求。" },
+    { max: 60, range: "41–60", name: "明显缺氧", tag: "缺氧",
+      desc: "已经能感觉到憋了。好几种状况反复出现，这套系统本来就在漏气，跟你矫不矫情没关系。",
+      roast: "别再把「是我心态不好」挂在嘴边。你被关在一间漏气的房间里，还被要求感恩：白天开会演戏，晚上加班赎罪，功劳写别人的名，锅扣你头上。这套组合拳天天招呼，谁能不缺氧？",
+      advice: "把「我想走」正式提上日程：更新简历、了解行情、算一下存款能撑几个月。别再和同事抱团吐槽到半夜，那只会让你更累、还更走不了。",
+      pdesc: "已经能感觉到憋了。这套系统本来就在漏气，跟你矫不矫情没关系。",
+      proast: "白天开会演戏，晚上加班赎罪，功劳写别人的名，锅扣你头上。这套组合拳天天招呼，谁能不缺氧？",
+      padvice: "把「我想走」提上日程：更新简历，算一下存款能撑几个月。" },
+    { max: 80, range: "61–80", name: "高危预警", tag: "高危",
+      desc: "长期待下去要出问题的级别。精力、健康和自我，正在被一点点抽干，只是你自己还没察觉。",
+      roast: "这已经是慢性消耗了。你在用健康换工资，用尊严换工位，用「再熬熬」换一个永远不会来的加薪。最扎心的是，就算你累到进医院，那个位置三天就有人补上。公司离了你照样转，你垮了却只有自己家人扛。",
+      advice: "把「逃离」当成一个正经项目推进：算清赔偿、留好证据、看准下家再动。既不裸辞，也不硬扛。命和健康，比任何 offer 都贵。",
+      pdesc: "长期待下去要出问题的级别。精力、健康和自我，正在被一点点抽干。",
+      proast: "你在用健康换工资，用「再熬熬」换一个永远不会来的加薪。就算你累到进医院，那个位置三天就有人补上。",
+      padvice: "把逃离当正经项目推进：算赔偿、留证据、看准下家再动。" },
+    { max: 100, range: "81–100", name: "毒气室级别", tag: "毒室",
+      desc: "能撑到现在，说明你是真的强。但别硬扛了，这是损耗，而且越拖越贵。",
+      roast: "恭喜入住毒气室套房：微管理、抢功劳、半夜 @ 你、晋升靠酒量，十项全能全让你赶上了。你现在的每一天，都在拿自己的命给别人的 KPI 垫背。继续待下去不是打工，是慢性处刑，刑期无期，还不能上诉。",
+      advice: "调整心态救不了这个局面，先保命：留证据、算赔偿、找下家，能多快走就多快走。如果睡眠和情绪已经被拖垮，去找专业的人聊，别一个人扛。",
+      pdesc: "能撑到现在，说明你是真的强。但这是损耗，而且越拖越贵。",
+      proast: "微管理、抢功劳、半夜 @ 你、晋升靠酒量，十项全能全让你赶上了。继续待下去不是打工，是慢性处刑。",
+      padvice: "先保命：留证据、算赔偿、找下家，能多快走就多快走。" }
+  ];
+
+  var itemsEl = document.getElementById("items");
+  var answers = new Array(QUESTIONS.length).fill(0); // 0 = 未填
+
+  /* ---------- 指针计量器（可复用） ---------- */
+  function createGauge(container) {
+    var W = 260, H = 146, cx = 130, cy = 126, R = 104;
+    var arcLen = Math.PI * R;
+    var ticks = "";
+    for (var i = 0; i <= 10; i++) {
+      var p = i * 10;
+      var th = (180 + p * 1.8) * Math.PI / 180;
+      var major = (p % 20 === 0);
+      var r1 = R - 1, r2 = R - (major ? 12 : 8);
+      var x1 = cx + Math.cos(th) * r1, y1 = cy + Math.sin(th) * r1;
+      var x2 = cx + Math.cos(th) * r2, y2 = cy + Math.sin(th) * r2;
+      ticks += '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) +
+        '" stroke="' + (major ? "#8d9aa5" : "#ccd5dc") + '" stroke-width="' + (major ? 2 : 1) + '" stroke-linecap="round"/>';
+      if (major) {
+        var rl = R - 28;
+        var lx = cx + Math.cos(th) * rl, ly = cy + Math.sin(th) * rl;
+        ticks += '<text x="' + lx.toFixed(1) + '" y="' + (ly + 4).toFixed(1) + '" text-anchor="middle" font-size="11" fill="#64727d">' + p + '</text>';
+      }
+    }
+    var d = "M" + (cx - R) + " " + cy + " A" + R + " " + R + " 0 0 1 " + (cx + R) + " " + cy;
+    container.innerHTML =
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true">' +
+      '<path d="' + d + '" fill="none" stroke="#e6ebef" stroke-width="13" stroke-linecap="round"/>' +
+      '<path class="g-arc" d="' + d + '" fill="none" stroke="' + C1 + '" stroke-width="13" stroke-linecap="round" stroke-dasharray="' + arcLen.toFixed(1) + '" stroke-dashoffset="' + arcLen.toFixed(1) + '"/>' +
+      ticks +
+      '<g class="g-needle"><polygon points="' + (cx - 5) + ',' + cy + ' ' + cx + ',' + (cy - R + 16) + ' ' + (cx + 5) + ',' + cy + '" fill="#22303a"/></g>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="9" fill="#22303a"/>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="3.5" fill="#fff"/>' +
+      '</svg>';
+    var arc = container.querySelector(".g-arc");
+    var needle = container.querySelector(".g-needle");
+    return function (score) {
+      arc.setAttribute("stroke-dashoffset", (arcLen * (1 - score / 100)).toFixed(1));
+      needle.setAttribute("transform", "rotate(" + (-90 + score * 1.8).toFixed(1) + "," + cx + "," + cy + ")");
+    };
+  }
+
+  var setLiveGauge = createGauge(document.getElementById("liveGauge"));
+  var setFinalGauge = createGauge(document.getElementById("finalGauge"));
+
+  /* ---------- 题目构建 ---------- */
+  function buildItems() {
+    var html = "";
+    for (var i = 0; i < QUESTIONS.length; i++) {
+      var chips = "";
+      for (var k = 0; k < SCALE.length; k++) {
+        chips += '<button type="button" data-i="' + i + '" data-v="' + (k + 1) + '" aria-pressed="false" aria-label="第 ' + (i + 1) + ' 题，' + SCALE[k] + '">' + SCALE[k] + '</button>';
+      }
+      html += '<div class="qcard">'
+        + '<div class="q"><span class="num" aria-hidden="true">' + (i + 1) + '</span><span>' + QUESTIONS[i] + '</span></div>'
+        + '<div class="chips" role="group" aria-label="第 ' + (i + 1) + ' 题频率选择">' + chips + '</div>'
+        + '</div>';
+    }
+    itemsEl.innerHTML = html;
+
+    var all = itemsEl.querySelectorAll(".chips button");
+    for (var b = 0; b < all.length; b++) {
+      all[b].addEventListener("click", function (e) {
+        var idx = +e.target.getAttribute("data-i");
+        var val = +e.target.getAttribute("data-v");
+        answers[idx] = val;
+        var sibs = e.target.parentNode.querySelectorAll("button");
+        for (var s = 0; s < sibs.length; s++) {
+          sibs[s].classList.remove("on");
+          sibs[s].setAttribute("aria-pressed", "false");
+        }
+        e.target.classList.add("on");
+        e.target.setAttribute("aria-pressed", "true");
+        updateLive();
+        document.getElementById("reset").disabled = false;
+      });
+    }
+  }
+
+  function answeredCount() {
+    var n = 0;
+    for (var i = 0; i < answers.length; i++) if (answers[i] > 0) n++;
+    return n;
+  }
+  function answeredSum() {
+    var s = 0;
+    for (var i = 0; i < answers.length; i++) if (answers[i] > 0) s += answers[i];
+    return s;
+  }
+
+  /* 实时指针：只按已答题换算分数，随作答即时变动 */
+  function updateLive() {
+    var n = answeredCount(), sum = answeredSum();
+    var score = n === 0 ? 0 : Math.round(((sum - n) / (4 * n)) * 100);
+    setLiveGauge(score);
+    document.getElementById("liveScore").textContent = score;
+    document.getElementById("liveCount").textContent = n;
+    document.getElementById("progFill").style.width = (n / QUESTIONS.length * 100) + "%";
+    document.getElementById("progCount").textContent = "已填 " + n + " / " + QUESTIONS.length;
+  }
+
+  function computeScore() {
+    var sum = 0;
+    for (var i = 0; i < answers.length; i++) sum += answers[i];
+    var score = Math.round(((sum - 10) / 40) * 100);
+    if (score < 0) score = 0;
+    if (score > 100) score = 100;
+    return score;
+  }
+  function tierFor(score) {
+    for (var i = 0; i < TIERS.length; i++) if (score <= TIERS[i].max) return TIERS[i];
+    return TIERS[TIERS.length - 1];
+  }
+  function today() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
+  }
+  function serialNo() {
+    var d = new Date();
+    var stamp = "" + d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+    var rand = String(Math.floor(1000 + Math.random() * 9000));
+    return "NO." + stamp + "-" + rand;
+  }
+
+  /* ---------- 海报绘制（全站统一深青） ---------- */
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+  function wrapLines(ctx, text, maxW) {
+    var chars = String(text).split(""), line = "", lines = [];
+    for (var i = 0; i < chars.length; i++) {
+      var test = line + chars[i];
+      if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = chars[i]; }
+      else line = test;
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+  function para(ctx, text, x, y, maxW, lh, font, color, align) {
+    ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align || "left";
+    var lines = wrapLines(ctx, text, maxW);
+    for (var j = 0; j < lines.length; j++) ctx.fillText(lines[j], x, y + j * lh);
+    return y + lines.length * lh;
+  }
+
+  function drawPoster(score, tier) {
+    var W = 750, H = 1334, S = 2;
+    var cv = document.getElementById("poster");
+    cv.width = W * S; cv.height = H * S;
+    var ctx = cv.getContext("2d");
+    ctx.setTransform(S, 0, 0, S, 0, 0);
+
+    // 统一深青渐变（不随档位变色）
+    var g = ctx.createLinearGradient(0, 0, W * 0.6, H);
+    g.addColorStop(0, C1); g.addColorStop(1, C2);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    // 装饰
+    ctx.fillStyle = "rgba(255,255,255,0.07)";
+    ctx.beginPath(); ctx.arc(W - 60, 70, 160, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.05)";
+    ctx.beginPath(); ctx.arc(40, H - 40, 200, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(W - 90, H - 260, 90, 0, Math.PI * 2); ctx.fill();
+
+    // 标题 + 编号日期
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(255,255,255,0.82)";
+    ctx.font = '600 23px ' + F;
+    ctx.fillText("自测结果 · 数据不出本机", W / 2, 92);
+    ctx.fillStyle = "#fff";
+    ctx.font = '800 62px ' + F;
+    ctx.fillText("工位窒息指数", W / 2, 162);
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.font = '400 28px ' + F;
+    ctx.fillText("你的办公室，缺氧了吗？", W / 2, 204);
+    ctx.fillStyle = "rgba(255,255,255,0.68)";
+    ctx.font = '400 20px ' + F;
+    ctx.fillText(serialNo() + " · 测于 " + today(), W / 2, 238);
+
+    // 分数
+    ctx.fillStyle = "#fff";
+    ctx.font = '800 148px ' + F;
+    ctx.fillText(String(score), W / 2, 404);
+    ctx.fillStyle = "rgba(255,255,255,0.82)";
+    ctx.font = '600 32px ' + F;
+    ctx.fillText("/ 100", W / 2, 444);
+
+    // 档位胶囊
+    var label = tier.name + "   " + tier.range;
+    ctx.font = '800 42px ' + F;
+    var tw = ctx.measureText(label).width;
+    var pw = tw + 88, ph = 84, px = W / 2 - pw / 2, py = 476;
+    roundRect(ctx, px, py, pw, ph, 42);
+    ctx.fillStyle = "rgba(255,255,255,0.18)"; ctx.fill();
+    ctx.lineWidth = 2.5; ctx.strokeStyle = "rgba(255,255,255,0.55)"; ctx.stroke();
+    ctx.fillStyle = "#fff"; ctx.textAlign = "center";
+    ctx.fillText(label, W / 2, py + 56);
+
+    // 一句话结论（海报短句版）
+    var cy = para(ctx, tier.pdesc, W / 2, py + ph + 60, 640, 42, '400 27px ' + F, "rgba(255,255,255,0.95)", "center");
+
+    // 毒舌点评（海报短句版）
+    cy += 44;
+    ctx.textAlign = "left";
+    ctx.fillStyle = "rgba(255,255,255,0.75)";
+    ctx.font = '700 25px ' + F;
+    ctx.fillText("— 毒舌点评", 66, cy);
+    cy = para(ctx, tier.proast, 66, cy + 48, W - 132, 42, '400 27px ' + F, "rgba(255,255,255,0.95)");
+
+    // 保命建议（海报短句版）
+    cy += 42;
+    ctx.fillStyle = "rgba(255,255,255,0.75)";
+    ctx.font = '700 25px ' + F;
+    ctx.fillText("— 保命建议", 66, cy);
+    cy = para(ctx, tier.padvice, 66, cy + 48, W - 132, 42, '400 27px ' + F, "#ffffff");
+
+    // 页脚：免责 + 裂变文案 + 编号（固定定位，保证各档一致）
+    ctx.textAlign = "center";
+    ctx.strokeStyle = "rgba(255,255,255,0.3)"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(66, H - 176); ctx.lineTo(W - 66, H - 176); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,0.82)";
+    ctx.font = '400 21px ' + F;
+    ctx.fillText("原创自测小工具 · 非标准化量表 · 不做临床诊断", W / 2, H - 140);
+    ctx.fillStyle = "#fff";
+    ctx.font = '700 27px ' + F;
+    ctx.fillText("保存这张图，甩给那个天天加班的同事", W / 2, H - 100);
+    ctx.fillStyle = "rgba(255,255,255,0.68)";
+    ctx.font = '400 19px ' + F;
+    ctx.fillText(serialNo() + " · " + today(), W / 2, H - 60);
+  }
+
+  /* ---------- 视图切换 ---------- */
+  var viewQuiz = document.getElementById("viewQuiz");
+  var viewResult = document.getElementById("viewResult");
+
+  function showQuiz() {
+    viewResult.classList.remove("show");
+    viewQuiz.style.display = "";
+    window.scrollTo(0, 0);
+  }
+  function showResult() {
+    viewQuiz.style.display = "none";
+    viewResult.classList.add("show");
+    window.scrollTo(0, 0);
+  }
+
+  function buildTierStrip(activeMax) {
+    var html = "";
+    for (var i = 0; i < TIERS.length; i++) {
+      var lo = i === 0 ? 0 : TIERS[i - 1].max + 1;
+      html += '<div class="ts' + (TIERS[i].max === activeMax ? " on" : "") + '">' + TIERS[i].name + " " + lo + "–" + TIERS[i].max + "</div>";
+    }
+    document.getElementById("tierStrip").innerHTML = html;
+  }
+
+  function renderResult() {
+    if (answeredCount() < QUESTIONS.length) {
+      var left = QUESTIONS.length - answeredCount();
+      showToast("还有 " + left + " 题没填，先补完再诊断");
+      return;
+    }
+    var score = computeScore();
+    var tier = tierFor(score);
+
+    document.getElementById("rbScore").textContent = score;
+    document.getElementById("rbTier").textContent = tier.name;
+    document.getElementById("fScore").textContent = score;
+    document.getElementById("fTier").textContent = tier.name;
+    document.getElementById("fRange").textContent = tier.range + " 分";
+    document.getElementById("fDesc").textContent = tier.desc;
+    document.getElementById("rsRoast").textContent = tier.roast;
+    document.getElementById("rsAdvice").textContent = tier.advice;
+
+    buildTierStrip(tier.max);
+    setFinalGauge(score);
+    drawPoster(score, tier);
+    document.getElementById("shareBox").classList.remove("show");
+    showResult();
+  }
+
+  function resetAll() {
+    answers = new Array(QUESTIONS.length).fill(0);
+    var all = itemsEl.querySelectorAll(".chips button");
+    for (var b = 0; b < all.length; b++) {
+      all[b].classList.remove("on");
+      all[b].setAttribute("aria-pressed", "false");
+    }
+    updateLive();
+    document.getElementById("reset").disabled = true;
+    document.getElementById("shareBox").classList.remove("show");
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    showQuiz();
+  }
+
+  function share() {
+    if (answeredCount() < QUESTIONS.length) { showToast("请先填完十题再分享"); return; }
+    var code = "s" + answers.join("");
+    var url = location.origin + location.pathname + location.search + "#" + code;
+    var box = document.getElementById("shareBox");
+    var input = document.getElementById("shareUrl");
+    input.value = url; box.classList.add("show");
+    history.replaceState(null, "", "#" + code);
+    input.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(function(){}, function(){});
+    showToast("分享链接已复制到剪贴板");
+  }
+
+  function saveImage() {
+    var score = computeScore();
+    var cv = document.getElementById("poster");
+    var link = document.createElement("a");
+    link.download = "工位窒息指数-" + score + "分.png";
+    link.href = cv.toDataURL("image/png");
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    showToast("海报已保存为 PNG");
+  }
+
+  var toastTimer;
+  function showToast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  function loadFromHash() {
+    var h = (location.hash || "").replace(/^#/, "");
+    if (h.indexOf("s") !== 0 || h.length !== QUESTIONS.length + 1) return false;
+    var digits = h.slice(1);
+    for (var i = 0; i < QUESTIONS.length; i++) {
+      var v = parseInt(digits.charAt(i), 10);
+      if (isNaN(v) || v < 1 || v > 5) return false;
+      answers[i] = v;
+      var btns = itemsEl.querySelectorAll('.chips button[data-i="' + i + '"]');
+      for (var b = 0; b < btns.length; b++) {
+        if (+btns[b].getAttribute("data-v") === v) {
+          btns[b].classList.add("on");
+          btns[b].setAttribute("aria-pressed", "true");
+        }
+      }
+    }
+    return true;
+  }
+
+  document.getElementById("analyze").addEventListener("click", renderResult);
+  document.getElementById("reset").addEventListener("click", resetAll);
+  document.getElementById("restart").addEventListener("click", resetAll);
+  document.getElementById("share").addEventListener("click", share);
+  document.getElementById("saveImg").addEventListener("click", saveImage);
+
+  buildItems();
+  updateLive();
+  if (loadFromHash()) {
+    updateLive();
+    document.getElementById("reset").disabled = false;
+    renderResult();
+    showToast("已从分享链接还原你的作答");
+  }
+})();
+</script>
+</body>
+</html>
