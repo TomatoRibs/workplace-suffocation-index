@@ -25,7 +25,7 @@ allowed-tools:
 
 ## 这个 Skill 做什么
 
-- **核心产物**：一份单文件 HTML（`assets/quiz.html`），离线双击即可使用，零外部依赖。
+- **核心产物**：一份单文件 HTML（`assets/workplace-suffocation-index.html`），离线双击即可使用，零外部依赖。
 - **结构要点**：开场引导 → 10 题双列卡片（横向五级分段选择，初始为空）→ 实时进度 → 半圆仪表盘计分 → 五档结论 + 对照表 → URL hash 一键分享。
 - **数据边界**：全部计算在浏览器端完成，不联网、不上传任何数据；分享靠 URL hash 编码答案，无需服务器。
 
@@ -37,9 +37,9 @@ allowed-tools:
 
 ## 如何使用（给智能体的工作流）
 
-1. 把 `assets/quiz.html` 复制到用户当前工作区（默认文件名 `quiz.html`）。
+1. 把 `assets/workplace-suffocation-index.html` 复制到用户当前工作区（默认文件名 `workplace-suffocation-index.html`）。
 2. 用 `present_files` 打开预览，让用户直接使用。
-3. 若用户要改题 / 改色 / 加维度 / 导出 PDF，在 `assets/quiz.html` 的代码基础上调整，并同步更新本技能里的副本。
+3. 若用户要改题 / 改色 / 加维度 / 导出 PDF，在 `assets/workplace-suffocation-index.html` 的代码基础上调整，并同步更新本技能里的副本。
 
 ## 说明与免责
 
